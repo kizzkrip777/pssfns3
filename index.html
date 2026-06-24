@@ -56,7 +56,7 @@
 
     <!-- MindAR Scene Setup -->
     <!-- Replace 'target.mind' with your compiled tracking file if named differently -->
-    <a-scene mindar-image="imageTargetSrc:https://drive.google.com/file/d/1TNpaEyC92IVHBE6KK6_eci6pDSXEiNja/view?usp=drive_link ; autoStart: true; uiScanning: no;" 
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind ; autoStart: true; uiScanning: no;" 
              embedded color-space="sRGB" 
              renderer="colorManagement: true, physicallyCorrectLights: true" 
              vr-mode-ui="enabled: false" 
@@ -65,7 +65,7 @@
         <a-assets>
             <!-- Load your 3D Tiger Shark Asset -->
             <!-- Ensure your .glb file includes an embedded swimming animation -->
-            <a-asset-item id="sharkModel" src="https://drive.google.com/file/d/1zg5eAJCMh8BcF_kjxq2hCQu_pWhCuTLy/view?usp=drive_link"></a-asset-item>
+            <a-asset-item id="sharkModel" src="./tiger_shark_galeocerdo_cuvier.glb"></a-asset-item>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
