@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR Underwater Ocean Experience</title>
+    
+    <!-- Include A-Frame and MindAR Libraries -->
+    <script src="https://aframe.io"></script>
+    <script src="https://jsdelivr.net"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        /* Custom UI scanning overlay */
+        #scanning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            pointer-events: none;
+            color: white;
+            font-family: Arial, sans-serif;
+            transition: opacity 0.5s ease;
+        }
+        .scanner-box {
+            width: 70vw;
+            height: 40vh;
+            border: 3px dashed #00e5ff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+            margin-bottom: 20px;
+        }
+        .hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- On-screen Guide UI for the User -->
+    <div id="scanning-overlay">
+        <div class="scanner-box"></div>
+        <h2>Scan the Ocean Image to Start</h2>
+        <p>Point your camera at the background picture</p>
+    </div>
+
+    <!-- MindAR Scene Setup -->
+    <!-- Replace 'target.mind' with your compiled tracking file if named differently -->
+    <a-scene mindar-image="imageTargetSrc:https://drive.google.com/file/d/1TNpaEyC92IVHBE6KK6_eci6pDSXEiNja/view?usp=drive_link ; autoStart: true; uiScanning: no;" 
+             embedded color-space="sRGB" 
+             renderer="colorManagement: true, physicallyCorrectLights: true" 
+             vr-mode-ui="enabled: false" 
+             device-orientation-permission-ui="enabled: false">
+        
+        <a-assets>
+            <!-- Load your 3D Tiger Shark Asset -->
+            <!-- Ensure your .glb file includes an embedded swimming animation -->
+            <a-asset-item id="sharkModel" src="https://drive.google.com/file/d/1zg5eAJCMh8BcF_kjxq2hCQu_pWhCuTLy/view?usp=drive_link"></a-asset-item>
+        </a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+        <!-- The Target Anchor: index 0 maps to the first image in your compiled targets file -->
+        
+            
+            <!-- The 3D Shark Object -->
+            <!-- position, rotation, and scale can be tweaked to perfectly fit your backdrop -->
+            <a-gltf-model id="shark" 
+                          src="#sharkModel" 
+                          position="0 0 0" 
+                          rotation="0 90 0" 
+                          scale="0.5 0.5 0.5"
+                          animation-mixer="clip: *; loop: repeat; timeScale: 1;">
+            </a-gltf-model>
+
+        
+    </a-scene>
+
+    <!-- JavaScript to Handle UI Changes When Scanned -->
+    <script>
+        const targetEntity = document.querySelector('#ar-target');
+        const overlay = document.querySelector('#scanning-overlay');
+
+        // Hide scanning instructions when the phone successfully recognizes the picture
+        targetEntity.addEventListener("targetFound", event => {
+            console.log("Target successfully scanned!");
+            overlay.classList.add('hidden');
+        });
+
+        // Show scanning instructions again if the user pulls their phone camera away
+        targetEntity.addEventListener("targetLost", event => {
+            console.log("Target lost from camera view.");
+            overlay.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
